@@ -111,7 +111,7 @@ def diagnose():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
+    return send_from_directory('uploads', filename)
 
 if __name__ == '__main__':
     # 运行在 5000 端口
