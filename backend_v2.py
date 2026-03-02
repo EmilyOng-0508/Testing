@@ -2,11 +2,17 @@ import os
 import base64
 import json
 from flask import Flask, request, jsonify
+from flask import send_from_directory
 from flask_cors import CORS
 from openai import OpenAI  # 导入 OpenAI 库
 
 app = Flask(__name__)
 CORS(app)
+
+# [cite_start]确保 uploads 文件夹存在 [cite: 1]
+UPLOAD_FOLDER = 'uploads'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 # 这样写，代码会自动寻找你在 Render 后台填入的那个 Value
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -79,29 +85,33 @@ def parse_ai_response(raw_text):
 
 @app.route('/diagnose', methods=['POST'])
 def diagnose():
-    """
-    主控制流：协调各个独立函数完成整个 GPT 诊断流程
-    """
     try:
         data = request.json
         raw_image = data.get('image')
+        img_type = data.get('type', 'question') 
 
         if not raw_image:
             return jsonify({"status": "Error", "explanation": "未接收到图片数据"})
 
-        # 1. 预处理图片
+        # --- 保存逻辑 ---
+        if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
         processed_image = decode_image(raw_image)
-        # 2. 获取指令
-        instruction = generate_ai_prompt()
-        # 3. 调用 OpenAI 接口 (此处已改为 GPT)
-        ai_raw_output = call_openai_api(processed_image, instruction)
-        # 4. 格式化结果
-        final_result = parse_ai_response(ai_raw_output)
+        file_path = os.path.join(UPLOAD_FOLDER, f"{img_type}.png")
+        with open(file_path, "wb") as fh:
+            fh.write(base64.b64decode(processed_image))
+        # ----------------
 
-        return jsonify(final_result)
-        
+        instruction = generate_ai_prompt()
+        ai_raw_output = call_openai_api(processed_image, instruction)
+        return jsonify(parse_ai_response(ai_raw_output))
+    
+    # 必须加上这个 except 块来对应上面的 try
     except Exception as e:
         return jsonify({"status": "Error", "explanation": f"服务器内部错误: {str(e)}"})
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 if __name__ == '__main__':
     # 运行在 5000 端口
