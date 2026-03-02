@@ -93,19 +93,26 @@ def diagnose():
         if not raw_image:
             return jsonify({"status": "Error", "explanation": "未接收到图片数据"})
 
-        # --- 保存逻辑 ---
+        # --- 1. 保存图片逻辑 ---
         if not os.path.exists(UPLOAD_FOLDER): os.makedirs(UPLOAD_FOLDER)
         processed_image = decode_image(raw_image)
         file_path = os.path.join(UPLOAD_FOLDER, f"{img_type}.png")
         with open(file_path, "wb") as fh:
             fh.write(base64.b64decode(processed_image))
-        # ----------------
 
+        # --- 2. 调用 AI 诊断 ---
         instruction = generate_ai_prompt()
         ai_raw_output = call_openai_api(processed_image, instruction)
-        return jsonify(parse_ai_response(ai_raw_output))
+        ai_result = parse_ai_response(ai_raw_output)
+
+        # --- 3. 【新增】保存 AI 结果为 JSON 文件 ---
+        # 这样 app.py 就可以通过读取文件来显示文字了
+        json_file_path = os.path.join(UPLOAD_FOLDER, f"{img_type}.json")
+        with open(json_file_path, "w", encoding='utf-8') as f:
+            json.dump(ai_result, f, ensure_ascii=False, indent=4)
+
+        return jsonify(ai_result)
     
-    # 必须加上这个 except 块来对应上面的 try
     except Exception as e:
         return jsonify({"status": "Error", "explanation": f"服务器内部错误: {str(e)}"})
 
