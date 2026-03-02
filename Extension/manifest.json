@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Study Analyzer Capture",
+  "version": "1.0",
+  "description": "Floating widget to screenshot questions.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1/*",
+    "http://localhost/*",
+    "https://testing2-d9g4.onrender.com/*" 
+  ],
+  "action": {
+    "default_title": "Open Floating Window"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
