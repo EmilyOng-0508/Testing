@@ -59,11 +59,10 @@ streamlit run app.py
 ```text
 .
 ├── backend_v2.py        # Flask server: Handles image uploads, AI diagnosis, and file serving
-├── app.py               # Streamlit dashboard: The web interface that displays reports via URL
 ├── requirements.txt     # Python dependency list (Flask, OpenAI, Streamlit, etc.)
-├── uploads/             # Server-side storage for captured images and AI JSON reports
 └── Extension/           # Chrome Extension source files
-    ├── manifest.json    # Extension metadata and required permissions
+    ├── app.py               # Streamlit dashboard: The web interface that displays reports via URL
     ├── background.js    # Service worker managing screenshots and backend communication
-    └── content.js       # Content script for the draggable floating UI widget
+    ├── content.js       # Content script for the draggable floating UI widget
+    └── manifest.json    # Extension metadata and required permissions
 ```
