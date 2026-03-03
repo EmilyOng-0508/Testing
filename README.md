@@ -44,6 +44,32 @@ streamlit run app.py
 
 ---
 
+## ⚙️ Configuration Reminder
+
+Before installing the extension, ensure you have updated the following constants to match your deployment:
+
+### 1. Update Backend URL in Extension
+In `Extension/background.js`, locate the API URL and update it to your production link:
+```javascript
+// Extension/background.js
+const EMILY_API_URL = '[https://snap-tutor.onrender.com/diagnose](https://snap-tutor.onrender.com/diagnose)'; // Replace with your Render URL
+
+### 2. Update Backend URL in Extension
+-In Extension/manifest.json:
+Add your Render domain to host_permissions.
+
+In app.py:
+Update RENDER_URL to point to your backend.
+
+---
+// Extension/manifest.json
+"host_permissions": [
+    "[https://snap-tutor.onrender.com/](https://snap-tutor.onrender.com/)*" 
+],
+
+# app.py
+RENDER_URL = "[https://snap-tutor.onrender.com](https://snap-tutor.onrender.com)" # Your Backend Render URL
+
 ## 📸 Workflow
 
 1. **Invoke Extension**: Click the extension icon in your browser toolbar to summon the floating capture widget on any webpage.
