@@ -26,19 +26,21 @@ def decode_image(base64_string):
         base64_string = base64_string.split(",")[1]
     return base64_string
 
+# --- Inside backend_v2.py ---
+
 def generate_ai_prompt():
     """
-    Generate System Instruction: Define AI persona, task, and JSON output format
+    Generate System Instruction with formatting requirements
     """
     return """
     You are an expert tutor. Please analyze this learning screenshot:
-    1. Identify the [Question Content] and the [Student's Answer] from the image.
-    2. Determine if the student's answer is correct (pay attention to technical formulas).
-    3. Provide a detailed explanation of why the answer is correct or incorrect.
-    4. Categorize errors as either 'careless' (simple mistake) or 'concept' (misunderstanding of the topic).
-    5. Final output must be strictly in JSON format with the following fields: 
+    1. Identify the [Question Content] and the [Student's Answer].
+    2. Determine if it is correct.
+    3. Provide a detailed explanation. 
+       CRITICAL: Use clear spaces between all numbers and words (e.g., "5.20 after giving" instead of "5.20aftergiving").
+    4. Categorize errors as 'careless' or 'concept'.
+    5. Output strictly in JSON format: 
        { "status": "Correct/Incorrect", "topic": "...", "correct": true/false, "error_type": "careless/concept", "explanation": "...", "recognized_content": "..." }
-    Output raw JSON only. Do not include ```json markdown tags.
     """
 
 def call_openai_api(image_data, prompt):
