@@ -15,13 +15,22 @@ st.markdown("""
 <style>
     .stApp { background-color: #FFFFFF; color: #333333; font-family: 'Arial', sans-serif; }
     header {visibility: hidden;}
+
+    p, div, span {
+        line-height: 1.6 !important; 
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+
     div.stButton > button[kind="secondary"] {
         background-color: transparent; color: #333333; border: none; font-weight: bold;
     }
+            
     div.stButton > button[kind="primary"] {
         background-color: #F4D03F; color: #333333; border: none; border-radius: 30px; 
         padding: 10px 25px; font-weight: bold;
     }
+            
     h1 { font-size: 3rem !important; font-weight: 800 !important; }
 </style>
 """, unsafe_allow_html=True)
@@ -93,10 +102,21 @@ def show_dashboard():
             if response.status_code == 200:
                 result = response.json()
                 st.markdown("---")
-                st.success(f"### 🧠 AI Diagnosis Result")
-                st.write(f"**Topic:** {result.get('topic', 'Unknown')}")
-                st.write(f"**Status:** {result.get('status', 'Unknown')}")
-                st.info(f"**Detailed Explanation:**\n\n{result.get('explanation', 'No explanation available.')}")
+                st.success("### 🧠 AI Diagnosis Result")
+                
+                # Use columns for better spacing
+                col_a, col_b = st.columns(2)
+                with col_a:
+                    st.write(f"**Topic:** {result.get('topic', 'Unknown')}")
+                with col_b:
+                    st.write(f"**Status:** {result.get('status', 'Unknown')}")
+
+                # Use a bordered container instead of st.info to prevent text squashing
+                st.markdown("**Detailed Explanation:**")
+                with st.container(border=True):
+                    explanation_text = result.get('explanation', 'No explanation available.')
+                    # st.write handles word-wrapping much better for math/numbers
+                    st.write(explanation_text) 
             else:
                 st.warning("AI analysis report is being generated, please refresh in a moment...")
         except Exception as e:
