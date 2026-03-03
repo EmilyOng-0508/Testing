@@ -86,9 +86,9 @@ RENDER_URL = "[https://snap-tutor.onrender.com](https://snap-tutor.onrender.com)
 ```text
 .
 ├── backend_v2.py      # Flask server: Handles uploads & AI diagnosis
-├── app.py             # Streamlit dashboard: The web interface
 ├── requirements.txt   # Python dependency list
 └── Extension/         # Chrome Extension source files
+    ├── app.py             # Streamlit dashboard: The web interface
     ├── background.js  # Service worker for API communication
     ├── content.js     # Floating widget UI logic
     └── manifest.json  # Extension metadata & permissions
