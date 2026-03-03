@@ -53,22 +53,23 @@ In `Extension/background.js`, locate the API URL and update it to your productio
 ```javascript
 // Extension/background.js
 const EMILY_API_URL = '[https://snap-tutor.onrender.com/diagnose](https://snap-tutor.onrender.com/diagnose)'; // Replace with your Render URL
-
+```
 ### 2. Update Backend URL in Extension
--In Extension/manifest.json:
+In Extension/manifest.json:
 Add your Render domain to host_permissions.
-
-In app.py:
-Update RENDER_URL to point to your backend.
-
----
+```javascript
 // Extension/manifest.json
 "host_permissions": [
     "[https://snap-tutor.onrender.com/](https://snap-tutor.onrender.com/)*" 
 ],
-
-# app.py
+```
+### 3. Update Dashboard Connector
+In app.py, update the RENDER_URL so the dashboard can fetch your images and AI reports:
+```javascript
 RENDER_URL = "[https://snap-tutor.onrender.com](https://snap-tutor.onrender.com)" # Your Backend Render URL
+```
+
+---
 
 ## 📸 Workflow
 
