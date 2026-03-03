@@ -40,6 +40,7 @@ Run the Streamlit app locally or deploy it to a cloud platform:
 ```bash
 pip install -r requirements.txt
 streamlit run app.py
+```
 
 ---
 
@@ -65,3 +66,4 @@ streamlit run app.py
     ├── manifest.json    # Extension metadata and required permissions
     ├── background.js    # Service worker managing screenshots and backend communication
     └── content.js       # Content script for the draggable floating UI widget
+```
